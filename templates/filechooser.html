@@ -1,0 +1,62 @@
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+<script src="{{ STATIC_URL }}js/jquery.1.11.1.min.js" type="text/javascript"></script>
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% load staticfiles %}
+{% block bootstrap3_content %}
+
+    {% bootstrap_messages %}
+    {% block content %}
+        <div class="container">
+            <div class="header">
+                <h1 class="text-muted">
+                    <a href="/">Django PDF form filler</a>
+                </h1>
+            </div>
+            <h2>Please, upload your CSV and PDF form to generate the filled documents</h2>
+
+            <div class="jumbotron">
+                <form action="/generatefiles/" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="form-group">
+                        {{ form.pdf.errors }}
+                        <label class="control-label">{{ form.pdf.label }}</label>
+                        <input type="file" id="pdf" name="pdf" class="file">
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        {{ form.csv.errors }}
+                        <label class="control-label">{{ form.csv.label }}</label>
+                        <input type="file" id="csv" name="csv" class="file">
+
+                    </div>
+                    <br>
+
+                    <div class="form-group">
+                        {{ form.form_fields.errors }}
+
+                        <label for="form_fields">{{ form.form_fields.label }}</label>
+                        <br>
+                        Please, note if these names are not introduced exactly like in the form fields, the PDFs resultant will contain blank fields
+                        <br>
+                        <input type="text" class="form-control" id="form_fields" name="form_fields" placeholder="Field1,Field2,Field3,etc">
+                    </div>
+                    <br>
+
+                    <input class="btn btn-lg btn-success" type="submit" name="generate" value="Generate" />
+                </form>
+            </div>
+
+            <footer class="footer">
+                <p><a href="http://twitter.com/_juancb" target="_blank"> Juan Cruz-Benito</a>, 2015</p>
+
+
+            </footer>
+
+        </div> <!-- /container -->
+    {% endblock %}
+{% endblock %}
