@@ -4,7 +4,7 @@ This Git repo contains the code of the Django PDF Form filler app developed by J
 
 ### Why to use it? ###
 
-This web app enables users to fill PDF forms automatically, by combining PDF Forms with data contained in a CSV file. This application is highly recommended to automate the generation of certificates, accreditations or any other batch tasks regarding filling PDF forms.
+This web app enables users to fill PDF forms automatically, by combining PDF Forms with data contained in a CSV file. This application is highly recommended to automate the generation of conference certificates, accreditations or any other batch tasks regarding filling PDF forms.
 
 ### Libraries used in the code ###
 
@@ -33,11 +33,13 @@ Later use the same fields names in the application to fill them with the data en
 
 * Heroku reference deploying Django application - https://devcenter.heroku.com/articles/getting-started-with-django
 * Installing PDFTK to enable PDF filling options (appart from using libraries included in requirements.txt) - http://iamsonivivek-pdftk.blogspot.com.es/
-* If you are deploying the app on other hosting solution (or localhost i.e.), set HEROKU_DEPLOY variable to False in settings.py Also you can remove the vendor folder and Procfile when not deploying on Heroku (required for use PDFtk resources)
+* If you are deploying the app on other hosting solution (or localhost i.e.), set *HEROKU_DEPLOY* variable to *False* in *settings.py* Also you can remove the *vendor* folder and *Procfile* when not deploying on Heroku (required for use PDFtk resources)
 
 ### Demo ###
 
-Check out the live demo in https://formfiller.herokuapp.com/ To test it, you can use the PDF form and CSV example file contained in the resources_examples folder within this repository.
+Check out the live demo in https://formfiller.herokuapp.com/ 
+
+To test it, you can use the PDF form and CSV example file contained in the *resources_examples* folder within this repository.
 
 ## About Juan Cruz-Benito ##
 
