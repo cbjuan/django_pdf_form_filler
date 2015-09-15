@@ -33,7 +33,7 @@ Later use the same fields names in the application to fill them with the data en
 
 * Heroku reference deploying Django application - https://devcenter.heroku.com/articles/getting-started-with-django
 * Installing PDFTK to enable PDF filling options (appart from using libraries included in requirements.txt) - http://iamsonivivek-pdftk.blogspot.com.es/
-* If you are deploying the app on other hosting solution (or localhost i.e.), set HEROKU_DEPLOY variable to False in settings.py
+* If you are deploying the app on other hosting solution (or localhost i.e.), set HEROKU_DEPLOY variable to False in settings.py Also you can remove the vendor folder and Procfile when not deploying on Heroku (required for use PDFtk resources)
 
 ### Demo ###
 
