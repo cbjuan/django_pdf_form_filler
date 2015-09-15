@@ -91,16 +91,16 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
 
         csvfile.seek(0)
         for row in csv_data:
-            try:
-                dict_temp = {}
-                for x, i in enumerate(fields2fill):
-                    dict_temp[str(i)] = row[int(x)].decode('utf-8')
-                pdfout = pdfjinja(dict_temp)
-                pdfResult = filled_forms_path + "filled_form_" + str(counter) + ".pdf"
-                counter += 1
-                pdfout.write(open(pdfResult, 'wb'))
-            except:
-                return "Filling error"
+            #try:
+            dict_temp = {}
+            for x, i in enumerate(fields2fill):
+                dict_temp[str(i)] = row[int(x)].decode('utf-8')
+            pdfout = pdfjinja(dict_temp)
+            pdfResult = filled_forms_path + "filled_form_" + str(counter) + ".pdf"
+            counter += 1
+            pdfout.write(open(pdfResult, 'wb'))
+            #except:
+            #    return "Filling error"
     return filled_forms_path
 
 
@@ -158,8 +158,8 @@ def generate_files(request):
                                     "fill are not equal")
             elif filled_forms_path == "Filling error":
                 clean_files()
-                return HttpResponse("Error filling PDF forms. Please check the font type and other configuration "
-                                    "of the form fields")
+                return HttpResponse("Error filling PDF forms. Please check the font type and other form fields "
+                                    "configuration. Also check if there is enough disk space to generate all the PDFs")
 
             # PDFs generated properly. Offering the zip file donwload and removing all files uploaded and generated
             return serve_zip_clean(file2save_pdf, file2save_csv, filled_forms_path)
