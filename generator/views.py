@@ -91,16 +91,16 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
 
         csvfile.seek(0)
         for row in csv_data:
-            #try:
-            dict_temp = {}
-            for x, i in enumerate(fields2fill):
-                dict_temp[str(i)] = row[int(x)].decode('utf-8')
-            pdfout = pdfjinja(dict_temp)
-            pdfResult = filled_forms_path + "filled_form_" + str(counter) + ".pdf"
-            counter += 1
-            pdfout.write(open(pdfResult, 'wb'))
-            #except:
-            #    return "Filling error"
+            try:
+                dict_temp = {}
+                for x, i in enumerate(fields2fill):
+                    dict_temp[str(i)] = row[int(x)].decode('utf-8')
+                pdfout = pdfjinja(dict_temp)
+                pdfResult = filled_forms_path + "filled_form_" + str(counter) + ".pdf"
+                counter += 1
+                pdfout.write(open(pdfResult, 'wb'))
+            except:
+                return "Filling error"
     return filled_forms_path
 
 
