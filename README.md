@@ -32,7 +32,7 @@ Later use the same fields names in the application to fill them with the data en
 ### Deploying application on Heroku ###
 
 * Heroku reference deploying Django application - https://devcenter.heroku.com/articles/getting-started-with-django
-* Installing PDFTK to enable PDF filling options (appart from using libraries included in requirements.txt) - http://iamsonivivek-pdftk.blogspot.com.es/
+* Installing PDFTK to enable PDF filling options (apart from using libraries included in requirements.txt) - http://iamsonivivek-pdftk.blogspot.com.es/
 * If you are deploying the app on other hosting solution (or localhost i.e.), set *HEROKU_DEPLOY* variable to *False* in *settings.py* Also you can remove the *vendor* folder and *Procfile* when not deploying on Heroku (required for use PDFtk resources)
 
 **Note**: If you are planning on generate a high amount of filled PDFs or your initial PDF form file size is big, consider to deploy the app in a Heroku paid-account or another hosting. Due disk restrictions, the app could show you repeatedly an error if the disk limit is reached while generating filled PDFs.
