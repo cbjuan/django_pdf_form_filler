@@ -20,8 +20,8 @@ from django.conf import settings
 from django.contrib import admin
 from generator.views import *
 
-urlpatterns = patterns('',
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', index),
-    url(r'^generatefiles/$', generate_files),
-) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', index),
+    path('generatefiles/', generate_files),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
