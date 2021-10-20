@@ -78,30 +78,53 @@ def save_file(request, file, type):
 
 
 def fill_form_csvdata(pdf_file, csv_file, fields2fill):
+    # writer = PdfWriter()
     pdfForm = str(pdf_file)
-    pdfjinja = PdfJinja(pdfForm)
-    filled_forms_path = relative_project_path('files') + "/"
+    # pdfjinja = PdfJinja(pdfForm)
+    template_pdf = pdfrw.PdfReader(pdfForm)
+    filled_forms_path = relative_project_path('files') + "/output/"
     counter = 0
+
+    filled_forms_path = filled_forms_path.replace('\\', '*')
+    filled_forms_path = filled_forms_path.replace('*', '/')
+
+    # Get all the fields from the PDF Form
+    form_fields = []
+    for page in template_pdf.pages:
+        annotations = page['/Annots']
+        for annotation in annotations:
+            if annotation['/Subtype'] == '/Widget':
+                if annotation['/T']:
+                    key = annotation['/T'][1:-1]
+                    print(key)
+                    form_fields.append(key)
+
     with open(str(csv_file), 'rU') as csvfile:
         csv_data = csv.reader(csvfile, delimiter=';')
 
-        len_fields2fill = str(len(fields2fill))
-        len_csv_columns = str(len(next(csv_data)))
+        len_fields2fill = len(fields2fill)
+        len_csv_columns = len(next(csv_data))
         if len_fields2fill is not len_csv_columns:
             return "Columns error"
 
         csvfile.seek(0)
         for row in csv_data:
-            #try:
             dict_temp = {}
             for x, i in enumerate(fields2fill):
-                dict_temp[str(i)] = row[int(x)].decode('utf-8')
-            pdfout = pdfjinja(dict_temp)
-            pdfResult = filled_forms_path + "filled_form_" + str(counter) + ".pdf"
+                dict_temp[str(i)] = row[x]
+                print(row[x])
+
+            for field in form_fields:
+                if field in dict_temp.keys():
+                    pdfrw.PdfDict(V='{}'.format(dict_temp[field]))
+
+            # Fill the PDF
+            # writer.addPage(template_pdf)
+            # writer.write(filled_forms_path, str(counter) + '_teem.pdf')
+            template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
+            pdfrw.PdfWriter().write(filled_forms_path + str(counter) + '_teem.pdf', template_pdf)
             counter += 1
-            pdfout.write(open(pdfResult, 'wb'))
-            #except:
-            #    return "Filling error"
+
     return filled_forms_path
 
 
