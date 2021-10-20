@@ -106,9 +106,17 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
                 dict_temp[str(i)] = row[x]
                 print(row[x])
 
-            for field in form_fields:
-                if field in dict_temp.keys():
-                    pdfrw.PdfDict(V='{}'.format(dict_temp[field]))
+            for page in template_pdf.pages:
+                annotations = page['/Annots']
+                for annotation in annotations:
+                    if annotation['/Subtype'] == '/Widget':
+                        if annotation['/T']:
+                            key = annotation['/T'][1:-1]
+                            if key in dict_temp.keys():
+                                annotation.update(
+                                    pdfrw.PdfDict(V='{}'.format(dict_temp[key]))
+                                )
+                            
 
             # Fill the PDF
             # writer.addPage(template_pdf)
