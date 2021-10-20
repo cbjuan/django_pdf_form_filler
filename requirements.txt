@@ -15,3 +15,4 @@ pyPdf==1.13
 reportlab==3.6.2
 static3==0.7.0
 whitenoise==5.3.0
+pdfrw==0.4
