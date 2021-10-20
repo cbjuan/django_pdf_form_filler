@@ -167,12 +167,12 @@ def generate_files(request):
 
         else:
             # Form not valid. Show errors and try again
-            return render_to_response('filechooser.html', locals(), context_instance=RequestContext(request))
+            return render(request, 'filechooser.html', locals())
     else:
         # Request method is not POST. Try again
-        return render_to_response('filechooser.html', locals(), context_instance=RequestContext(request))
+        return render(request, 'filechooser.html', locals())
 
 
 def index(request):
     form = FileChooser()
-    return render_to_response('filechooser.html', locals(), context_instance=RequestContext(request))
+    return render(request, 'filechooser.html', locals())
