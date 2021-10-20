@@ -4,6 +4,8 @@ import glob
 import os
 import os.path
 import tempfile
+
+import pdfrw
 from django.contrib.sessions.backends import file
 from django.http import HttpResponse, StreamingHttpResponse
 
