@@ -4,15 +4,18 @@ import glob
 import os
 import os.path
 import tempfile
+
+import pdfrw
+from django.contrib.sessions.backends import file
 from django.http import HttpResponse, StreamingHttpResponse
 
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.template import RequestContext
 from django import forms
 from pdfjinja import PdfJinja
 import csv
 import zipfile
-from django.core.servers.basehttp import FileWrapper
+from wsgiref.util import FileWrapper
 
 # Create your views here.
 
@@ -77,30 +80,51 @@ def save_file(request, file, type):
 
 
 def fill_form_csvdata(pdf_file, csv_file, fields2fill):
+    # writer = PdfWriter()
     pdfForm = str(pdf_file)
-    pdfjinja = PdfJinja(pdfForm)
-    filled_forms_path = relative_project_path('files') + "/"
+    # pdfjinja = PdfJinja(pdfForm)
+    template_pdf = pdfrw.PdfReader(pdfForm)
+    filled_forms_path = relative_project_path('files') + "/output/"
     counter = 0
-    with open(str(csv_file), 'rU') as csvfile:
+
+    filled_forms_path = filled_forms_path.replace('\\', '*')
+    filled_forms_path = filled_forms_path.replace('*', '/')
+
+
+    with open(str(csv_file), 'rU', encoding="utf8") as csvfile:
         csv_data = csv.reader(csvfile, delimiter=';')
 
-        len_fields2fill = str(len(fields2fill))
-        len_csv_columns = str(len(next(csv_data)))
+        len_fields2fill = len(fields2fill)
+        len_csv_columns = len(next(csv_data))
         if len_fields2fill is not len_csv_columns:
             return "Columns error"
 
         csvfile.seek(0)
         for row in csv_data:
-            #try:
             dict_temp = {}
             for x, i in enumerate(fields2fill):
-                dict_temp[str(i)] = row[int(x)].decode('utf-8')
-            pdfout = pdfjinja(dict_temp)
-            pdfResult = filled_forms_path + "filled_form_" + str(counter) + ".pdf"
+                dict_temp[str(i)] = row[x]
+                print(row[x])
+
+            for page in template_pdf.pages:
+                annotations = page['/Annots']
+                for annotation in annotations:
+                    if annotation['/Subtype'] == '/Widget':
+                        if annotation['/T']:
+                            key = annotation['/T'][1:-1]
+                            if key in dict_temp.keys():
+                                annotation.update(
+                                    pdfrw.PdfDict(V='{}'.format(dict_temp[key]))
+                                )
+                            annotation.update(pdfrw.PdfDict(Ff=1))
+
+            # Fill the PDF
+            # writer.addPage(template_pdf)
+            # writer.write(filled_forms_path, str(counter) + '_teem.pdf')
+            template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
+            pdfrw.PdfWriter().write(filled_forms_path + str(counter) + '_teem.pdf', template_pdf)
             counter += 1
-            pdfout.write(open(pdfResult, 'wb'))
-            #except:
-            #    return "Filling error"
+
     return filled_forms_path
 
 
@@ -166,12 +190,12 @@ def generate_files(request):
 
         else:
             # Form not valid. Show errors and try again
-            return render_to_response('filechooser.html', locals(), context_instance=RequestContext(request))
+            return render(request, 'filechooser.html', locals())
     else:
         # Request method is not POST. Try again
-        return render_to_response('filechooser.html', locals(), context_instance=RequestContext(request))
+        return render(request, 'filechooser.html', locals())
 
 
 def index(request):
     form = FileChooser()
-    return render_to_response('filechooser.html', locals(), context_instance=RequestContext(request))
+    return render(request, 'filechooser.html', locals())
