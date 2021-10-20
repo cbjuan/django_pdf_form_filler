@@ -116,7 +116,7 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
                                 annotation.update(
                                     pdfrw.PdfDict(V='{}'.format(dict_temp[key]))
                                 )
-                            
+                            annotation.update(pdfrw.PdfDict(Ff=1))
 
             # Fill the PDF
             # writer.addPage(template_pdf)
