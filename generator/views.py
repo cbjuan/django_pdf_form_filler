@@ -90,16 +90,6 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
     filled_forms_path = filled_forms_path.replace('\\', '*')
     filled_forms_path = filled_forms_path.replace('*', '/')
 
-    # Get all the fields from the PDF Form
-    form_fields = []
-    for page in template_pdf.pages:
-        annotations = page['/Annots']
-        for annotation in annotations:
-            if annotation['/Subtype'] == '/Widget':
-                if annotation['/T']:
-                    key = annotation['/T'][1:-1]
-                    print(key)
-                    form_fields.append(key)
 
     with open(str(csv_file), 'rU') as csvfile:
         csv_data = csv.reader(csvfile, delimiter=';')
