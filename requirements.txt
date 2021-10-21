@@ -16,3 +16,5 @@ reportlab==3.6.2
 static3==0.7.0
 whitenoise==5.3.0
 pdfrw==0.4
+yagmail==0.14.260
+python-dotenv==0.19.1
