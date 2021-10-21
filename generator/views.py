@@ -90,7 +90,7 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
     filled_forms_path = filled_forms_path.replace('*', '/')
 
 
-    with open(str(csv_file), 'rU', encoding="utf8") as csvfile:
+    with open(str(csv_file), 'rU', encoding="utf8", errors='ignore') as csvfile:
         csv_data = csv.reader(csvfile, delimiter=';')
 
         len_fields2fill = len(fields2fill)
