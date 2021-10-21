@@ -18,6 +18,7 @@ import zipfile
 from wsgiref.util import FileWrapper
 
 # Create your views here.
+from mailing.mailer import *
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -115,9 +116,13 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
                                 annotation.update(
                                     pdfrw.PdfDict(V='{}'.format(dict_temp[key]))
                                 )
+                            # Lock the PDF form
                             annotation.update(pdfrw.PdfDict(Ff=1))
             template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
-            pdfrw.PdfWriter().write(filled_forms_path + str(counter) + '_teem.pdf', template_pdf)
+            pdfrw.PdfWriter().write(filled_forms_path + dict_temp['Name'] + '_teem.pdf', template_pdf)
+
+            # Sends the email
+            send_mail(dict_temp['Mail'], "TEEM'21", dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_teem.pdf')
             counter += 1
 
     return filled_forms_path
