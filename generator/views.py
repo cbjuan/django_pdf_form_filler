@@ -131,7 +131,7 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
 def serve_zip_clean(pdf_file, csv_file, filled_forms_path):
     temp = tempfile.TemporaryFile()
     zf = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
-    files2zip_list = glob.glob(filled_forms_path + 'filled_form_*.pdf')
+    files2zip_list = glob.glob(filled_forms_path + '*_teem.pdf')
     for file2zip in files2zip_list:
         try:
             zf.write(file2zip, os.path.basename(file2zip), zipfile.ZIP_DEFLATED)
