@@ -117,7 +117,7 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
                                     pdfrw.PdfDict(V='{}'.format(dict_temp[key]))
                                 )
                             # Lock the PDF form
-                            annotation.update(pdfrw.PdfDict(Ff=1))
+                            # annotation.update(pdfrw.PdfDict(Ff=1))
             template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
             pdfrw.PdfWriter().write(filled_forms_path + dict_temp['Name'] + '_teem.pdf', template_pdf)
 
