@@ -99,7 +99,7 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
             return "Columns error"
 
         csvfile.seek(0)
-        for row in csv_data:
+        for pdf_id, row in enumerate(csv_data):
             dict_temp = {}
             for x, i in enumerate(fields2fill):
                 dict_temp[str(i)] = row[x]
@@ -119,7 +119,7 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
                             # Lock the PDF form
                             # annotation.update(pdfrw.PdfDict(Ff=1))
             template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
-            pdfrw.PdfWriter().write(filled_forms_path + dict_temp['Name'] + '_teem.pdf', template_pdf)
+            pdfrw.PdfWriter().write(filled_forms_path + dict_temp['Name'] + '_teem_' + str(pdf_id) + '.pdf', template_pdf)
 
             # Sends the email
             send_mail(dict_temp['Mail'], "TEEM'21", dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_teem.pdf')
