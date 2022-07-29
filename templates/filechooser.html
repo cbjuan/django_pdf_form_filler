@@ -23,7 +23,7 @@
                     {% csrf_token %}
                     {{ form.non_field_errors }}
                     <br>
-                    <div class="form-group {% if form.non_field_errors %}  has-error has-feedback {% endif %}">
+                    <div class="form-group {% if form.conference.errors %}  has-error has-feedback {% endif %}">
                         <label class="control-label" for="conference">{{ form.conference.label }}</label>
                         <input type="text" class="form-control" id="conference" name="conference"
                                aria-describedby="inputError2Status"
@@ -44,7 +44,7 @@
                     </div>
                     <br>
 
-                    <div class="form-group {% if form.non_field_errors %}  has-error has-feedback {% endif %}">
+                    <div class="form-group {% if form.form_fields.errors %}  has-error has-feedback {% endif %}">
                         <label class="control-label" for="form_fields">{{ form.form_fields.label }}</label>
                         <br>
                         Please, note if these names are not introduced exactly like in the form fields, the PDFs resultant will contain blank fields
