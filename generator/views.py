@@ -87,7 +87,7 @@ def save_file(request, file, type):
         return False
 
 
-def fill_form_csvdata(pdf_file, csv_file, fields2fill):
+def fill_form_csvdata(pdf_file, csv_file, fields2fill, conference):
     pdfForm = str(pdf_file)
     template_pdf = pdfrw.PdfReader(pdfForm)
     filled_forms_path = relative_project_path('files') + "/"
@@ -126,10 +126,13 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
                             # Lock the PDF form
                             # annotation.update(pdfrw.PdfDict(Ff=1))
             template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
-            pdfrw.PdfWriter().write(filled_forms_path + dict_temp['Name'] + '_teem_' + str(pdf_id) + '.pdf', template_pdf)
+            pdfrw.PdfWriter().write(filled_forms_path + dict_temp['Name'] + '_' +
+                                    conference.lower() + '_' + str(pdf_id) + '.pdf', template_pdf)
 
             # Sends the email
-            #send_mail(dict_temp['Mail'], "TEEM'21", dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_teem.pdf')
+            # TODO: Filter unsupported conference name characters
+            send_mail(dict_temp['Mail'], conference, dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_' +
+                      conference.lower() + '.pdf')
             counter += 1
 
     return filled_forms_path
@@ -170,6 +173,7 @@ def generate_files(request):
             pdf_form = request.FILES['pdf']
             csv_file = request.FILES['csv']
             form_fields = request.POST.get('form_fields')
+            conference = request.POST.get('conference')
 
             file2save_pdf = save_file(request, pdf_form, "pdf")
             if not file2save_pdf:
@@ -182,7 +186,7 @@ def generate_files(request):
             fields2fill = form_fields.split(',')
 
             # Files uploaded properly, filling the PDF form & generating a new PDF per each CSV row
-            filled_forms_path = fill_form_csvdata(file2save_pdf, file2save_csv, fields2fill)
+            filled_forms_path = fill_form_csvdata(file2save_pdf, file2save_csv, fields2fill, conference)
             if filled_forms_path == "Columns error":
                 clean_files()
                 return HttpResponse("Error! Unable to fill PDF, number of CSV columns and number of fields to "
