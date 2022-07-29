@@ -132,7 +132,7 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill, conference):
             # Sends the email
             # TODO: Filter unsupported conference name characters
             send_mail(dict_temp['Mail'], conference, dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_' +
-                      conference.lower() + '.pdf')
+                      conference.lower() + '.pdf', conference)
             counter += 1
 
     return filled_forms_path
