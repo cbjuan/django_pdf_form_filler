@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import glob
-import os
 import os.path
 import tempfile
 
@@ -10,9 +9,7 @@ from django.contrib.sessions.backends import file
 from django.http import HttpResponse, StreamingHttpResponse
 
 from django.shortcuts import render, redirect
-from django.template import RequestContext
 from django import forms
-from pdfjinja import PdfJinja
 import csv
 import zipfile
 from wsgiref.util import FileWrapper
