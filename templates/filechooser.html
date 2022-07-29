@@ -34,24 +34,23 @@
                     <div class="form-group">
                         <label class="control-label">{{ form.pdf.label }}</label>
                         <input type="file" id="pdf" name="pdf" class="file">
+                        <span class="text-danger">{{ form.pdf.errors }}</span>
                     </div>
                     <br>
                     <div class="form-group">
-                        {{ form.csv.errors }}
                         <label class="control-label">{{ form.csv.label }}</label>
                         <input type="file" id="csv" name="csv" class="file">
-
+                        <span class="text-danger">{{ form.csv.errors }}</span>
                     </div>
                     <br>
 
-                    <div class="form-group">
-                        {{ form.form_fields.errors }}
-
-                        <label for="form_fields">{{ form.form_fields.label }}</label>
+                    <div class="form-group {% if form.non_field_errors %}  has-error has-feedback {% endif %}">
+                        <label class="control-label" for="form_fields">{{ form.form_fields.label }}</label>
                         <br>
                         Please, note if these names are not introduced exactly like in the form fields, the PDFs resultant will contain blank fields
                         <br>
                         <input type="text" class="form-control" id="form_fields" name="form_fields" placeholder="Field1,Field2,Field3,etc">
+                        <span class="text-danger">{{ form.form_fields.errors }}</span>
                     </div>
                     <br>
 
