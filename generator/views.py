@@ -33,12 +33,16 @@ class FileChooser(forms.Form):
     pdf = forms.Field(widget=forms.FileInput, label='Choose the PDF form to be filled', required=True)
     form_fields = forms.CharField(label="Provide the name of the form fields to fill separated by commas (if >1)",
                                   max_length=255)
+    conference = forms.CharField(label="Provide the conference name",
+                                 required= True,
+                                 max_length=255)
 
     def clean(self):
         cleaned_data = super(FileChooser, self).clean()
         csv_file = cleaned_data.get('csv')
         pdf_file = cleaned_data.get('pdf')
         form_fields = cleaned_data.get('form_fields')
+        conference = cleaned_data.get('conference')
 
         if csv_file and pdf_file:
             filename_csv = csv_file.name
@@ -59,6 +63,9 @@ class FileChooser(forms.Form):
 
         if not form_fields:
             raise forms.ValidationError("There are no form fields specified to fill")
+
+        if not conference:
+            raise forms.ValidationError("The conference name is not specified")
 
         return file
 
@@ -122,7 +129,7 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill):
             pdfrw.PdfWriter().write(filled_forms_path + dict_temp['Name'] + '_teem_' + str(pdf_id) + '.pdf', template_pdf)
 
             # Sends the email
-            send_mail(dict_temp['Mail'], "TEEM'21", dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_teem.pdf')
+            #send_mail(dict_temp['Mail'], "TEEM'21", dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_teem.pdf')
             counter += 1
 
     return filled_forms_path
