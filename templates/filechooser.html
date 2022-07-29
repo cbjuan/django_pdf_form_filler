@@ -22,8 +22,16 @@
                 <form action="/generatefiles/" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.non_field_errors }}
+                    <br>
+                    <div class="form-group {% if form.non_field_errors %}  has-error has-feedback {% endif %}">
+                        <label class="control-label" for="conference">{{ form.conference.label }}</label>
+                        <input type="text" class="form-control" id="conference" name="conference"
+                               aria-describedby="inputError2Status"
+                               placeholder="TEEM '21, IEEE MCE, etc">
+                        <span class="text-danger">{{ form.conference.errors }}</span>
+                    </div>
+                    <br>
                     <div class="form-group">
-                        {{ form.pdf.errors }}
                         <label class="control-label">{{ form.pdf.label }}</label>
                         <input type="file" id="pdf" name="pdf" class="file">
                     </div>
