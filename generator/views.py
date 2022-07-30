@@ -9,6 +9,7 @@ from django.contrib.sessions.backends import file
 from django.http import HttpResponse, StreamingHttpResponse
 
 from django.shortcuts import render, redirect
+from django.utils.text import slugify
 from django import forms
 import csv
 import zipfile
@@ -85,6 +86,7 @@ def save_file(request, file, type):
 
 
 def fill_form_csvdata(pdf_file, csv_file, fields2fill, conference):
+    conference_name = slugify(conference.lower())
     pdfForm = str(pdf_file)
     template_pdf = pdfrw.PdfReader(pdfForm)
     filled_forms_path = relative_project_path('files') + "/"
@@ -124,12 +126,11 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill, conference):
                             # annotation.update(pdfrw.PdfDict(Ff=1))
             template_pdf.Root.AcroForm.update(pdfrw.PdfDict(NeedAppearances=pdfrw.PdfObject('true')))
             pdfrw.PdfWriter().write(filled_forms_path + dict_temp['Name'] + '_' +
-                                    conference.lower() + '_' + str(pdf_id) + '.pdf', template_pdf)
+                                    conference_name + '_' + str(pdf_id) + '.pdf', template_pdf)
 
             # Sends the email
-            # TODO: Filter unsupported conference name characters
             send_mail(dict_temp['Mail'], conference, dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_' +
-                      conference.lower() + '.pdf', conference)
+                      conference_name + '.pdf', conference)
             counter += 1
 
     return filled_forms_path
