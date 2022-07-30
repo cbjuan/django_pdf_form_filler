@@ -137,6 +137,9 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill, conference):
 
 
 def serve_zip_clean(pdf_file, csv_file, filled_forms_path):
+    # Remove original template and data
+    os.remove(pdf_file)
+    os.remove(csv_file)
     temp = tempfile.TemporaryFile()
     zf = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
     files2zip_list = glob.glob(filled_forms_path + '*_teem.pdf')
@@ -148,8 +151,7 @@ def serve_zip_clean(pdf_file, csv_file, filled_forms_path):
     zf.close()
     for file2zip in files2zip_list:
         os.remove(file2zip)
-    os.remove(pdf_file)
-    os.remove(csv_file)
+
     response = StreamingHttpResponse(FileWrapper(temp), content_type='application/zip')
     response['Content-Disposition'] = 'attachment; filename="pdf_forms_filled.zip"'
     response['Content-Length'] = temp.tell()
@@ -194,7 +196,7 @@ def generate_files(request):
                 return HttpResponse("Error filling PDF forms. Please check the font type and other form fields "
                                     "configuration. Also check if there is enough disk space to generate all the PDFs")
 
-            # PDFs generated properly. Offering the zip file donwload and removing all files uploaded and generated
+            # PDFs generated properly. Offering the zip file download and removing all files uploaded and generated
             return serve_zip_clean(file2save_pdf, file2save_csv, filled_forms_path)
 
         else:
