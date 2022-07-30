@@ -142,7 +142,8 @@ def serve_zip_clean(pdf_file, csv_file, filled_forms_path):
     os.remove(csv_file)
     temp = tempfile.TemporaryFile()
     zf = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
-    files2zip_list = glob.glob(filled_forms_path + '*_teem.pdf')
+    # Generate certificates compressed zip
+    files2zip_list = glob.glob(filled_forms_path + '*.pdf')
     for file2zip in files2zip_list:
         try:
             zf.write(file2zip, os.path.basename(file2zip), zipfile.ZIP_DEFLATED)
