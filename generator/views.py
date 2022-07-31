@@ -86,7 +86,7 @@ def save_file(request, file, type):
         return False
 
 
-def fill_form_csvdata(pdf_file, csv_file, fields2fill, conference):
+def fill_form_csvdata(pdf_file, csv_file, fields2fill, conference, automailer):
     conference_name = slugify(conference.lower())
     pdfForm = str(pdf_file)
     template_pdf = pdfrw.PdfReader(pdfForm)
@@ -130,8 +130,11 @@ def fill_form_csvdata(pdf_file, csv_file, fields2fill, conference):
                                     conference_name + '_' + str(pdf_id) + '.pdf', template_pdf)
 
             # Sends the email
-            send_mail(dict_temp['Mail'], conference, dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_' +
-                      conference_name + '.pdf', conference)
+            if automailer:
+                send_mail(dict_temp['Mail'], conference, dict_temp['Name'], filled_forms_path + dict_temp['Name'] + '_' +
+                          conference_name + '.pdf', conference)
+
+            # Increment generated certificates counter
             counter += 1
 
     return filled_forms_path
@@ -189,7 +192,7 @@ def generate_files(request):
             fields2fill = form_fields.split(',')
 
             # Files uploaded properly, filling the PDF form & generating a new PDF per each CSV row
-            filled_forms_path = fill_form_csvdata(file2save_pdf, file2save_csv, fields2fill, conference)
+            filled_forms_path = fill_form_csvdata(file2save_pdf, file2save_csv, fields2fill, conference, automailer)
             if filled_forms_path == "Columns error":
                 clean_files()
                 return HttpResponse("Error! Unable to fill PDF, number of CSV columns and number of fields to "
