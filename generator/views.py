@@ -34,6 +34,7 @@ class FileChooser(forms.Form):
     conference = forms.CharField(label="Provide the conference name",
                                  required= True,
                                  max_length=255)
+    automailer = forms.BooleanField(label="Automailer", required=False)
 
     def clean(self):
         cleaned_data = super(FileChooser, self).clean()
