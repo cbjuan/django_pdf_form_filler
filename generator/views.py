@@ -176,6 +176,7 @@ def generate_files(request):
             csv_file = request.FILES['csv']
             form_fields = request.POST.get('form_fields')
             conference = request.POST.get('conference')
+            automailer = request.POST.get('automailer')
 
             file2save_pdf = save_file(request, pdf_form, "pdf")
             if not file2save_pdf:
