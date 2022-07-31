@@ -54,6 +54,15 @@
                     </div>
                     <br>
 
+                    <div class="form-check">
+                        <span class="font-weight-bold">
+                            <b>{{ form.automailer.label }}</b>
+                        </span>
+                        <br>
+                        <input type="checkbox" class="form-check-input" id="automailer" name="automailer" value="true">
+                        <label class="form-check-label" for="automailer"> Selecting it will automatically send the certificates to the recipient after its generation</label>
+                    </div>
+                    <br>
                     <input class="btn btn-lg btn-success" type="submit" name="generate" value="Generate" />
                 </form>
             </div>
